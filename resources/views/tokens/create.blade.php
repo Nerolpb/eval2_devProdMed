@@ -66,6 +66,35 @@
                             {{ __('ui.tokens.form.fields.scopes.options.posts_delete') }}
                         </label>
                     </div>
+                    {{-- Scopes commentaires ajoutés avec le système de commentaires --}}
+                    <div class="flex items-center mb-2">
+                        <input type="checkbox" id="scope-comments:read" name="scopes[]" value="comments:read"
+                            {{ in_array('comments:read', old('scopes', [])) ? 'checked' : '' }} class="mr-2">
+                        <label for="scope-comments:read" class="text-sm text-gray-700 dark:text-gray-300">
+                            {{ __('ui.tokens.form.fields.scopes.options.comments_read') }}
+                        </label>
+                    </div>
+                    <div class="flex items-center mb-2">
+                        <input type="checkbox" id="scope-comments:create" name="scopes[]" value="comments:create"
+                            {{ in_array('comments:create', old('scopes', [])) ? 'checked' : '' }} class="mr-2">
+                        <label for="scope-comments:create" class="text-sm text-gray-700 dark:text-gray-300">
+                            {{ __('ui.tokens.form.fields.scopes.options.comments_create') }}
+                        </label>
+                    </div>
+                    <div class="flex items-center mb-2">
+                        <input type="checkbox" id="scope-comments:update" name="scopes[]" value="comments:update"
+                            {{ in_array('comments:update', old('scopes', [])) ? 'checked' : '' }} class="mr-2">
+                        <label for="scope-comments:update" class="text-sm text-gray-700 dark:text-gray-300">
+                            {{ __('ui.tokens.form.fields.scopes.options.comments_update') }}
+                        </label>
+                    </div>
+                    <div class="flex items-center mb-2">
+                        <input type="checkbox" id="scope-comments:delete" name="scopes[]" value="comments:delete"
+                            {{ in_array('comments:delete', old('scopes', [])) ? 'checked' : '' }} class="mr-2">
+                        <label for="scope-comments:delete" class="text-sm text-gray-700 dark:text-gray-300">
+                            {{ __('ui.tokens.form.fields.scopes.options.comments_delete') }}
+                        </label>
+                    </div>
                     @error('scopes')
                         <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                     @enderror

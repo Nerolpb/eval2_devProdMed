@@ -130,4 +130,93 @@
             </ul>
         </footer>
     </article>
+
+    {{-- ===== SECTION COMMENTAIRES ===== --}}
+    {{--
+        La section est placée en dehors de l'<article> du post pour bien
+        séparer visuellement le contenu du post et ses commentaires.
+        L'ancre id="comments" permet de revenir directement ici après
+        soumission/modification/suppression d'un commentaire.
+    --}}
+    <section id="comments" class="mt-6">
+        <h2 class="text-xl font-bold dark:text-white mb-4">
+            {{ trans_choice('ui.comments.count', $post->comments->count()) }}
+        </h2>
+
+        {{-- Liste des commentaires existants --}}
+        @forelse ($post->comments as $comment)
+            <div class="bg-white dark:bg-slate-800 rounded-lg shadow-sm p-4 mb-3">
+                <div class="flex items-start justify-between gap-4">
+                    <div class="flex-1 min-w-0">
+                        {{-- En-tête : auteur + date --}}
+                        <p class="text-sm font-semibold dark:text-white">
+                            <a href="{{ url('@' . $comment->user->username) }}" class="hover:underline">
+                                {{ $comment->user->first_name }} {{ $comment->user->last_name }}
+                            </a>
+                            <span class="font-normal text-gray-500 dark:text-gray-400 text-xs ml-2"
+                                  title="{{ $comment->created_at->isoFormat('LLLL') }}">
+                                {{ $comment->created_at->diffForHumans() }}
+                            </span>
+                        </p>
+                        {{-- Contenu du commentaire --}}
+                        <p class="mt-1 dark:text-gray-300 break-words">{{ $comment->content }}</p>
+                    </div>
+
+                    {{-- Actions : modifier (auteur) / supprimer (auteur ou propriétaire du post) --}}
+                    <div class="flex gap-3 shrink-0">
+                        @can('update', $comment)
+                            <a href="{{ url('/comments/' . $comment->id . '/edit') }}"
+                               class="text-sm text-teal-600 dark:text-purple-400 hover:underline">
+                                {{ __('ui.comments.form.actions.edit') }}
+                            </a>
+                        @endcan
+
+                        @can('delete', $comment)
+                            <form method="POST" action="{{ url('/comments/' . $comment->id) }}"
+                                  onsubmit="return confirm('{{ __('ui.comments.form.actions.delete_confirm') }}')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                        class="text-sm text-red-600 dark:text-red-400 hover:underline cursor-pointer">
+                                    {{ __('ui.comments.form.actions.delete') }}
+                                </button>
+                            </form>
+                        @endcan
+                    </div>
+                </div>
+            </div>
+        @empty
+            <p class="text-gray-500 dark:text-gray-400 italic mb-4">
+                {{ __('ui.comments.no_comments') }}
+            </p>
+        @endforelse
+
+        {{-- Formulaire d'ajout d'un commentaire (utilisateurs connectés seulement) --}}
+        @auth
+            <div class="mt-4 bg-white dark:bg-slate-800 rounded-lg shadow-sm p-4">
+                <form method="POST" action="{{ url('/posts/' . $post->id . '/comments') }}">
+                    @csrf
+
+                    <div class="mb-3">
+                        <label for="content"
+                               class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            {{ __('ui.comments.form.fields.content.label') }}
+                        </label>
+                        <textarea id="content" name="content" rows="3"
+                            placeholder="{{ __('ui.comments.form.fields.content.placeholder') }}"
+                            class="w-full px-3 py-2 border rounded-md bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:ring-2 focus:border-transparent @error('content') border-red-500 focus:ring-red-500 @else border-gray-300 dark:border-gray-600 focus:ring-teal-500 dark:focus:ring-purple-500 @enderror">{{ old('content') }}</textarea>
+                        @error('content')
+                            <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <button type="submit"
+                        class="px-4 py-2 bg-teal-600 dark:bg-purple-900 text-white rounded-md hover:bg-teal-700 dark:hover:bg-purple-800 cursor-pointer">
+                        {{ __('ui.comments.form.actions.submit') }}
+                    </button>
+                </form>
+            </div>
+        @endauth
+    </section>
 </x-default-layout>
+

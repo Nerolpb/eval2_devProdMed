@@ -35,7 +35,7 @@ class TokenController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'scopes' => 'required|array|min:1',
-            'scopes.*' => 'string|in:posts:read,posts:create,posts:update,posts:delete',
+            'scopes.*' => 'string|in:posts:read,posts:create,posts:update,posts:delete,comments:read,comments:create,comments:update,comments:delete',
             'expiration_date' => 'nullable|date|after:today',
         ]);
 

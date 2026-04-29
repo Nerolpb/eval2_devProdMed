@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\MyProfileController;
 use App\Http\Controllers\PostController;
@@ -27,6 +28,21 @@ Route::resource('posts', PostController::class)->only(['index', 'show']);
 Route::singleton('my-profile', MyProfileController::class)->destroyable()->middleware('auth');
 
 Route::match(['put', 'patch'], '/likes/{post}', [LikeController::class, 'update'])->middleware('auth');
+
+/**
+ * Routes des commentaires.
+ *
+ * store est imbriquée sous /posts/{post}/comments car on a besoin du post
+ * pour créer le commentaire. edit/update/destroy opèrent directement sur le
+ * commentaire (son ID suffit).
+ *
+ * Toutes ces routes exigent d'être connecté (middleware 'auth').
+ * Les autorisations fines (qui peut quoi) sont gérées dans CommentPolicy.
+ */
+Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->middleware('auth');
+Route::get('/comments/{comment}/edit', [CommentController::class, 'edit'])->middleware('auth');
+Route::patch('/comments/{comment}', [CommentController::class, 'update'])->middleware('auth');
+Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->middleware('auth');
 
 Route::controller(AuthController::class)->group(function () {
     Route::get('/auth/register', 'showRegister');

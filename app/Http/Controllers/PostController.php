@@ -54,7 +54,14 @@ class PostController extends Controller
      */
     public function show(string $id)
     {
-        $post = Post::with('user')->with('likes')->findOrFail($id);
+        // On charge les commentaires avec leurs auteurs en même temps que le post
+        // pour éviter le problème N+1 (une requête pour chaque auteur de commentaire).
+        $post = Post::with('user')
+            ->with('likes')
+            ->with(['comments' => function ($query) {
+                $query->with('user')->orderBy('created_at', 'asc');
+            }])
+            ->findOrFail($id);
 
         $user = Auth::user();
         $reaction = null;

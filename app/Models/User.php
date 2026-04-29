@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\Comment;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -27,5 +28,13 @@ class User extends Authenticatable
     public function likes(): BelongsToMany
     {
         return $this->belongsToMany(Post::class, 'likes')->using(Like::class)->withTimestamps()->withPivot('reaction');
+    }
+
+    /**
+     * Get the comments written by the user.
+     */
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
     }
 }

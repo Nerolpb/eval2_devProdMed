@@ -169,6 +169,10 @@ return [
                         'posts_read' => 'Lire les posts',
                         'posts_update' => 'Modifier des posts',
                         'posts_delete' => 'Supprimer des posts',
+                        'comments_read' => 'Lire les commentaires',
+                        'comments_create' => 'Créer des commentaires',
+                        'comments_update' => 'Modifier des commentaires',
+                        'comments_delete' => 'Supprimer des commentaires',
                     ],
                 ],
                 'content' => [
@@ -183,6 +187,31 @@ return [
             'actions' => [
                 'submit' => 'Créer le jeton',
                 'cancel' => 'Annuler',
+            ],
+        ],
+    ],
+    'comments' => [
+        'section_title' => 'Commentaires',
+        'count' => '{0} Aucun commentaire|{1} :count commentaire|[2,*] :count commentaires',
+        'no_comments' => 'Aucun commentaire pour l\'instant. Soyez le premier à commenter !',
+        'edit' => [
+            'title' => 'Modifier le commentaire',
+            'description' => 'Modifiez votre commentaire.',
+        ],
+        'form' => [
+            'fields' => [
+                'content' => [
+                    'label' => 'Votre commentaire',
+                    'placeholder' => 'Écrivez votre commentaire...',
+                ],
+            ],
+            'actions' => [
+                'submit' => 'Publier',
+                'edit' => 'Modifier',
+                'cancel' => 'Annuler',
+                'delete' => 'Supprimer',
+                'save' => 'Sauvegarder',
+                'delete_confirm' => 'Souhaitez-vous vraiment supprimer ce commentaire ? Cette action est irréversible.',
             ],
         ],
     ],

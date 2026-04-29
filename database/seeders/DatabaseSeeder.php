@@ -137,6 +137,42 @@ class DatabaseSeeder extends Seeder
                         'updated_at' => new \DateTime('2026-02-09 12:40:00'),
                     ]
                 ]);
+
+                // Insert some test comments to demonstrate the comment system:
+                // - Jane comments on John's post (cross-user)
+                // - John comments on his own post (self-comment)
+                // - John comments on Jane's post
+                // - Jane answers on her own post
+                DB::table('comments')->insert([
+                    [
+                        'user_id' => 2, // Jane comments on John's first post
+                        'post_id' => 1,
+                        'content' => 'Great first post, John! Really enjoyed reading it.',
+                        'created_at' => new \DateTime('2026-02-09 12:45:00'),
+                        'updated_at' => new \DateTime('2026-02-09 12:45:00'),
+                    ],
+                    [
+                        'user_id' => 1, // John replies on his own post
+                        'post_id' => 1,
+                        'content' => 'Thanks Jane, glad you liked it!',
+                        'created_at' => new \DateTime('2026-02-09 12:50:00'),
+                        'updated_at' => new \DateTime('2026-02-09 12:50:00'),
+                    ],
+                    [
+                        'user_id' => 1, // John comments on Jane's second post
+                        'post_id' => 5,
+                        'content' => 'Interesting perspective, Jane. I totally agree!',
+                        'created_at' => new \DateTime('2026-02-09 13:00:00'),
+                        'updated_at' => new \DateTime('2026-02-09 13:00:00'),
+                    ],
+                    [
+                        'user_id' => 2, // Jane replies on her own post
+                        'post_id' => 5,
+                        'content' => 'Thank you John, I appreciate the kind words.',
+                        'created_at' => new \DateTime('2026-02-09 13:05:00'),
+                        'updated_at' => new \DateTime('2026-02-09 13:05:00'),
+                    ],
+                ]);
             }
         );
     }
